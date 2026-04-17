@@ -1,0 +1,163 @@
+📦 CONFIGURACIÓN DOCKER COMPLETADA
+====================================
+
+✅ ARCHIVOS CREADOS/ACTUALIZADOS:
+
+Configuración Docker:
+  ├── Dockerfile              → Imagen multietapa (Maven + Java 21)
+  ├── docker-compose.yml      → Orquestación MySQL + App
+  ├── .dockerignore          → Archivos ignorados en construcción Docker
+  └── init-db.sql            → Script de inicialización de BD
+
+Scripts de Despliegue:
+  ├── deploy-aws-ec2.sh      → Automatización para AWS EC2
+  ├── run-docker.bat         → Script Windows para ejecutar Docker
+  └── verify-docker-setup.sh → Verificación de configuración
+
+Configuración de Aplicación:
+  ├── .env.example           → Variables de entorno de ejemplo
+  ├── application-mysql.yml  → Configuración MySQL con variables
+  └── .gitignore            → Actualizado para archivos sensibles
+
+Documentación:
+  └── DOCKER-DEPLOYMENT.md   → Guía completa de despliegue
+
+====================================
+
+📊 ARQUITECTURA:
+
+┌─────────────────────────────────────┐
+│         AWS EC2 Instance            │
+├─────────────────────────────────────┤
+│   ┌──────────────┐  ┌──────────────┐│
+│   │   Franchise  │  │    MySQL     ││
+│   │   API Docker │  │    Docker    ││
+│   │ (Port 8080)  │  │ (Port 3306)  ││
+│   └──────────────┘  └──────────────┘│
+│         │                 │         │
+│         └─────────────────┘         │
+│         Docker Network              │
+└─────────────────────────────────────┘
+
+====================================
+
+🚀 INICIO RÁPIDO:
+
+OPCIÓN 1: Windows - Ejecución Local
+  1. Abre PowerShell o CMD
+  2. Ve a: c:\Users\owo\Music\Prueba Accetu Oswaldo
+  3. Ejecuta: run-docker.bat
+  4. Accede a: http://localhost:8080/api/franchises
+
+OPCIÓN 2: Linux/Mac - Ejecución Local
+  1. cd ~/tu-ruta/franchiseapi
+  2. docker-compose up -d
+  3. curl http://localhost:8080/api/franchises
+
+OPCIÓN 3: AWS EC2 - Despliegue Automatizado
+  1. Crea una instancia EC2 (Ubuntu 22.04)
+  2. Conéctate por SSH
+  3. curl -fsSL https://tu-repo/deploy-aws-ec2.sh | bash
+  4. Accede a: http://tu-ip-ec2:8080/api/franchises
+
+====================================
+
+🔐 CREDENCIALES POR DEFECTO:
+
+MySQL:
+  Usuario: franchise_user
+  Contraseña: franchise_password
+  Base de datos: franchise_db
+  Host: mysql (Docker) | localhost:3306 (Local)
+
+Root MySQL:
+  Usuario: root
+  Contraseña: root_password
+
+⚠️  CAMBIAR EN PRODUCCIÓN: Editar docker-compose.yml
+
+====================================
+
+📋 VARIABLES DE ENTORNO DISPONIBLES:
+
+SPRING_PROFILES_ACTIVE=mysql
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/franchise_db
+SPRING_DATASOURCE_USERNAME=franchise_user
+SPRING_DATASOURCE_PASSWORD=franchise_password
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SERVER_PORT=8080
+
+Ver más en: .env.example
+
+====================================
+
+✅ VERIFICACIÓN:
+
+Local (después de ejecutar docker-compose up):
+  curl http://localhost:8080/actuator/health
+  curl http://localhost:8080/api/franchises
+  docker-compose ps
+  docker-compose logs -f app
+
+AWS EC2 (después del despliegue):
+  ssh -i tu-key.pem ubuntu@tu-ec2-ip
+  docker ps
+  docker logs -f franchise-api
+  curl http://localhost:8080/actuator/health
+
+====================================
+
+📚 DOCUMENTACIÓN COMPLETA:
+
+Lee DOCKER-DEPLOYMENT.md para:
+  - Instrucciones detalladas
+  - Troubleshooting
+  - Configuración de seguridad
+  - Backup y monitoreo
+  - Preguntas frecuentes
+
+====================================
+
+🔧 REQUISITOS:
+
+VERSIONES:
+  • Docker: 20.10+ (con Docker Compose)
+  • Java: 21 (incluido en Dockerfile)
+  • Maven: 3.9.14 (usado en build)
+  • MySQL: 8.4 (en container)
+
+HARDWARE (recomendado):
+  • Local: 4GB RAM, 10GB disco
+  • AWS: t3.small (2GB RAM, 20GB disco)
+
+====================================
+
+🎯 PRÓXIMOS PASOS:
+
+1. ✓ Instala Docker Desktop:
+     https://www.docker.com/products/docker-desktop
+
+2. ✓ Ejecuta localmente:
+     run-docker.bat (Windows)
+     docker-compose up -d (Linux/Mac)
+
+3. ✓ Prueba los endpoints:
+     http://localhost:8080/api/franchises
+
+4. ✓ Lee la documentación completa:
+     DOCKER-DEPLOYMENT.md
+
+5. ✓ Configura AWS EC2:
+     Crea una instancia y ejecuta deploy-aws-ec2.sh
+
+====================================
+
+📞 SOPORTE:
+
+Si encuentras problemas, consulta:
+  1. DOCKER-DEPLOYMENT.md (Sección Troubleshooting)
+  2. docker-compose logs -f (para ver logs)
+  3. docker ps (para ver estado)
+  4. docker exec -it franchise-api bash (acceso al contenedor)
+
+====================================

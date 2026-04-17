@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: franchise-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: franchise_db
+      MYSQL_USER: franchise_user
+      MYSQL_PASSWORD: franchise_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - franchise-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: franchise-api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/franchise_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: franchise_user
+      SPRING_DATASOURCE_PASSWORD: franchise_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - franchise-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  franchise-network:
+    driver: bridge

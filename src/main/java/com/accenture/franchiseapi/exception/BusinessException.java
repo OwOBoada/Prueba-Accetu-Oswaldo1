@@ -1,0 +1,8 @@
+package com.accenture.franchiseapi.exception;
+
+public class BusinessException extends RuntimeException {
+
+    public BusinessException(String message) {
+        super(message);
+    }
+}
